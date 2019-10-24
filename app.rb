@@ -4,14 +4,17 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
 
+
 def init_db
 	@db = SQLite3::Database.new'leprosorium.db'
 	@db.results_as_hash = true
 end
 
+
 before do 
 	init_db
 end
+
 
 configure do
 	init_db
@@ -22,6 +25,7 @@ configure do
 				);'
 end
 
+
 get '/' do
 	@results = @db.execute 'SELECT * 
 						   FROM Posts 
@@ -29,9 +33,11 @@ get '/' do
 	erb :index
 end
 
+
 get '/new' do
 	erb :new
 end
+
 
 post '/new' do
 	u_post = params[:user_post]
@@ -45,5 +51,12 @@ post '/new' do
 				values (?, datetime());', [u_post]
 
 	redirect to '/'
-	
+
+end
+
+
+get '/details/:post_id' do
+	post_id = params[:post_id]
+
+	erb "Displaying information with resulsts for post with id #{post_id}"
 end
