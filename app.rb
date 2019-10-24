@@ -56,10 +56,25 @@ end
 
 
 get '/details/:post_id' do
+	#getting id from url
 	post_id = params[:post_id]
+
+	#getting list of posts
     results = @db.execute 'SELECT * 
 						   FROM Posts 
 						   WHERE id = ?;', [post_id]
+	#saving one post in a variable
 	@row = results[0]
 	erb :details
+end
+
+
+post '/details/:post_id' do
+	#getting id from url
+	post_id = params[:post_id]
+
+	#getting variable from form
+	u_comment = params[:user_comment]
+
+	erb "You typed #{u_comment} for post #{post_id}"
 end
