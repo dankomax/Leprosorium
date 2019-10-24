@@ -33,5 +33,10 @@ end
 post '/new' do
 	u_post = params[:user_post]
 
+	if u_post.length <= 0
+		@error = 'You can not submit an empty post'
+		return erb :new
+	end
+
 	erb "Your post is: #{u_post}"
 end
