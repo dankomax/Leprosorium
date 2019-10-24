@@ -5,12 +5,21 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def init_db
-	@db = SQLite3::Database.new 'leprosorium.db.'
+	@db = SQLite3::Database.new'leprosorium.db'
 	@db.results_as_hash = true
 end
 
 before do 
 	init_db
+end
+
+configure do
+	init_db
+	@db.execute 'CREATE TABLE if not exists Posts (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					created_date DATA,
+					content TEXT
+				);'
 end
 
 get '/' do
