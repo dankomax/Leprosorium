@@ -4,5 +4,6 @@
 <% @results.each do |post| %>
 	<p><%= post['content'] %></p>
 	<p>Added at <%= post['created_date'] %></p>
+	<a href="/post/<%= post['id'] %>">Comments</a>
 	<hr/>
 <% end %>
