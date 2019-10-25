@@ -86,5 +86,8 @@ post '/details/:post_id' do
 	#getting variable from form
 	u_comment = params[:user_comment]
 
-	erb "You typed #{u_comment} for post #{post_id}"
+	@db.execute 'insert into Comments (content, created_date, post_id)
+				values (?, datetime(), ?);', [u_comment, post_id]
+
+	redirect to ('/details/' + post_id)
 end
