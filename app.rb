@@ -75,6 +75,13 @@ get '/details/:post_id' do
 						   WHERE id = ?;', [post_id]
 	#saving one post in a variable
 	@row = results[0]
+
+	# comments for current post
+	@comments = @db.execute 'SELECT * 
+							FROM Comments
+							WHERE post_id = ?
+							ORDER BY id;', [post_id]
+
 	erb :details
 end
 
