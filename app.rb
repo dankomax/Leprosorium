@@ -23,6 +23,7 @@ configure do
 	@db.execute 'CREATE TABLE if not exists Posts (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					created_date DATA,
+					author TEXT,
 					content TEXT
 				);'
 
@@ -30,6 +31,7 @@ configure do
 	@db.execute 'CREATE TABLE if not exists Comments (
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					created_date DATA,
+					author TEXT,
 					content TEXT,
 					post_id integer
 				);'
@@ -51,14 +53,15 @@ end
 
 post '/new' do
 	u_post = params[:user_post]
+	author = params[:author]
 
 	if u_post.length <= 0
 		@error = 'You can not submit an empty post'
 		return erb :new
 	end
 
-	@db.execute 'insert into Posts (content, created_date)
-				values (?, datetime());', [u_post]
+	@db.execute 'insert into Posts (author, content, created_date)
+				values (?, ?, datetime());', [author, u_post]
 
 	redirect to '/'
 
@@ -92,9 +95,15 @@ post '/details/:post_id' do
 
 	#getting variable from form
 	u_comment = params[:user_comment]
+	author = params[:author]
 
-	@db.execute 'insert into Comments (content, created_date, post_id)
-				values (?, datetime(), ?);', [u_comment, post_id]
+	if u_comment.length <= 0
+		@error = 'You can not add empty comment'
+		return erb :new
+	end
+
+	@db.execute 'insert into Comments (author, content, created_date, post_id)
+				values (?, ?, datetime(), ?);', [author, u_comment, post_id]
 
 	redirect to ('/details/' + post_id)
 end
